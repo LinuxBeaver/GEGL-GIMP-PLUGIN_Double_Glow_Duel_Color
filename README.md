@@ -1,6 +1,9 @@
 Double Glow Duel Color
 =========
 
+
+![image preview](duelcolor.png)
+![image preview](doubleglow.png)
 This filter requires your layer to have an alpha channel and to prevent color loss you are strongly recommended to apply this GEGL filter on a duplicate layer while fusing it with Gimp blend modes. GEGL's blending operations will work at the cost of color loss. Gimp's blend modes do not have this problem.
 
 
