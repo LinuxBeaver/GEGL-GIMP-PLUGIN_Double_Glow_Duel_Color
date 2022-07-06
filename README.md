@@ -1,7 +1,7 @@
-high pass of box blur
+Double Glow Duel Color
 =========
 
-A custom GEGL operation (and by extension GIMP filter) that implements a reversal of Box Blur's algorithm to sharpen images'
+This filter requires your layer to have an alpha channel and to prevent color loss you are strongly recommended to apply this GEGL filter on a duplicate layer while fusing it with Gimp blend modes. GEGL's blending operations will work at the cost of color loss. 
 
 
 
@@ -16,7 +16,6 @@ most distributions).
 ```bash
 meson setup --buildtype=release build
 ninja -C build
-cp build/high-pass-box.so ~/.local/share/gegl-0.4/plug-ins
 ```
 
 If you have an older version of gegl you may need to copy to `~/.local/share/gegl-0.3/plug-ins`
