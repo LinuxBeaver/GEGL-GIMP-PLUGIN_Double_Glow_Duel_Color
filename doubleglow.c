@@ -88,6 +88,13 @@ property_color  (color2, _("Glow 2 Color"), "#ffdb00")
  */
 
 
+property_double (radius, _("Glow 2 Blur radius"), 1.0)
+  value_range   (0.0, G_MAXDOUBLE)
+  ui_range      (0.0, 40.0)
+  ui_steps      (1, 5)
+  ui_gamma      (1.5)
+  ui_meta       ("unit", "pixel-distance")
+
 
 property_double (opacity2, _("Glow 2 Opacity"), 1.2)
   value_range   (0.0, 2.0)
@@ -102,12 +109,7 @@ property_double (grow_radius, _("Glow 2 Glow Radius"), 17.0)
   ui_meta       ("unit", "pixel-distance")
   description (_("The distance to expand the shadow before blurring; a negative value will contract the shadow instead"))
 
-property_double (radius, _("Glow 2 Blur radius"), 1.0)
-  value_range   (0.0, G_MAXDOUBLE)
-  ui_range      (0.0, 40.0)
-  ui_steps      (1, 5)
-  ui_gamma      (1.5)
-  ui_meta       ("unit", "pixel-distance")
+
 
 
 property_double (gaussian3, _("Universal Blur"), 10.0)
