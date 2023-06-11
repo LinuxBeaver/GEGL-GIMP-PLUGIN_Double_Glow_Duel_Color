@@ -44,7 +44,7 @@ property_color (color, _("Glow 1 Color"), "#0061ff")
 property_double (gaussian, _("Glow 1 Blur"), 24.0)
    description (_("Standard deviation for the X and Y axis"))
    value_range (0.0, 50.0)
-   ui_range    (0.24, 50.0)
+   ui_range    (0.0, 50.0)
    ui_gamma    (3.0)
    ui_meta     ("unit", "pixel-distance")
 
@@ -52,7 +52,7 @@ property_double (gaussian, _("Glow 1 Blur"), 24.0)
 property_double (gaussian2, _("Glow 1 Blur Spread"), 0.0)
    description (_("Spread Blur 1"))
    value_range (0.0, 30.0)
-   ui_range    (0.24, 30.0)
+   ui_range    (0.0, 30.0)
    ui_gamma    (3.0)
    ui_meta     ("unit", "pixel-distance")
     ui_meta     ("role", "output-extent")
@@ -102,7 +102,7 @@ property_double (opacity2, _("Glow 2 Opacity"), 1.2)
 
 property_double (grow_radius, _("Glow 2 Glow Radius"), 17.0)
   value_range   (-1, 50.0)
-  ui_range      (-50.0, 50.0)
+  ui_range      (-1.0, 50.0)
   ui_digits     (0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
@@ -159,24 +159,13 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:gaussian-blur",
                                   NULL);
 
-
-
    opacity = gegl_node_new_child (gegl,
                                   "operation", "gegl:opacity",
                                   NULL);
 
-
-
-
-
-
    glow2 = gegl_node_new_child (gegl,
                                   "operation", "gegl:dropshadow",
                                   NULL);
-
-
-
-
 
   gegl_node_link_many (input, photocopy, c2a, color, gaussian, opacity, glow2, gaussian3, output, NULL);
 
