@@ -17,6 +17,21 @@
  * Double Glow Effect 2022 Beaver 
  */
 
+
+/*There was once a gaussian 2 property that was never used. I Kept the name gaussian 3 to avoid preset breakages. It is what it is. 
+
+Here is Double Glow's GEGL Graph from July 2022. This may not be 100% the same 
+as the plugin. If you feed this info to Gimp's GEGL Graph you can test it.
+
+photocopy black=3
+color-to-alpha
+color-overlay value=#ffe76c
+opacity value=4
+dropshadow radius=10 grow-radius=33 color=#ee91ff
+gaussian-blur std-dev-x=40 std-dev-y=40
+
+
+*/
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
@@ -49,43 +64,15 @@ property_double (gaussian, _("Glow 1 Blur"), 24.0)
    ui_meta     ("unit", "pixel-distance")
 
 
-property_double (gaussian2, _("Glow 1 Blur Spread"), 0.0)
-   description (_("Spread Blur 1"))
-   value_range (0.0, 30.0)
-   ui_range    (0.0, 30.0)
-   ui_gamma    (3.0)
-   ui_meta     ("unit", "pixel-distance")
-    ui_meta     ("role", "output-extent")
-
-
-
 property_double (opacity, _("Glow 1 Opacity"), 2.5)
     description (_("Global opacity value that is always used on top of the optional auxiliary input buffer."))
     value_range (0.0, 4.0)
     ui_range    (0.0, 4.0)
 
-property_double (x, _("Glow 2 X"), 1.0)
-  description   (_("Glow 2 offset"))
-  ui_range      (-12.0, 12.0)
-  ui_steps      (1, 10)
-    ui_meta     ("role", "output-extent")
-
-property_double (y, _("Glow  2 Y"), 1.0)
-  description   (_("Vertical shadow offset"))
-  ui_range      (-12.0, 12.0)
-  ui_steps      (1, 10)
-    ui_meta     ("role", "output-extent")
-
-
-
 
 property_color  (color2, _("Glow 2 Color"), "#ffdb00")
-    /* TRANSLATORS: the string 'black' should not be translated */
   description   (_("The shadow's color (defaults to 'black')"))
 
-/* It does make sense to sometimes have opacities > 1 (see GEGL logo
- * for example)
- */
 
 
 property_double (radius, _("Glow 2 Blur radius"), 1.0)
@@ -130,7 +117,7 @@ property_double (gaussian3, _("Universal Blur"), 10.0)
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *output, *photocopy, *c2a, *color, *gaussian, *gaussian2, *gaussian3, *glow2, *opacity;
+  GeglNode *input, *output, *photocopy, *c2a, *color, *gaussian, *gaussian3, *glow2, *opacity;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -151,9 +138,6 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:gaussian-blur",
                                   NULL);
 
-   gaussian2 = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gaussian-blur",
-                                  NULL);
 
    gaussian3 = gegl_node_new_child (gegl,
                                   "operation", "gegl:gaussian-blur",
@@ -164,8 +148,8 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
    glow2 = gegl_node_new_child (gegl,
-                                  "operation", "gegl:dropshadow",
-                                  NULL);
+                                  "operation", "gegl:dropshadow", "x", 0.0, "y", 0.0,  NULL);
+                          
 
   gegl_node_link_many (input, photocopy, c2a, color, gaussian, opacity, glow2, gaussian3, output, NULL);
 
@@ -179,12 +163,8 @@ static void attach (GeglOperation *operation)
   gegl_operation_meta_redirect (operation, "opacity", opacity, "value");
   gegl_operation_meta_redirect (operation, "gaussian", gaussian, "std-dev-x");
   gegl_operation_meta_redirect (operation, "gaussian", gaussian, "std-dev-y");
-  gegl_operation_meta_redirect (operation, "gaussian2", gaussian2, "std-dev-x");
-  gegl_operation_meta_redirect (operation, "gaussian2", gaussian2, "std-dev-y");
   gegl_operation_meta_redirect (operation, "gaussian3", gaussian3, "std-dev-x");
   gegl_operation_meta_redirect (operation, "gaussian3", gaussian3, "std-dev-y");
-  gegl_operation_meta_redirect (operation, "x", glow2, "x");
-  gegl_operation_meta_redirect (operation, "y", glow2, "y");
   gegl_operation_meta_redirect (operation, "opacity2", glow2, "opacity");
   gegl_operation_meta_redirect (operation, "grow_radius", glow2, "grow-radius");
   gegl_operation_meta_redirect (operation, "radius", glow2, "radius");
@@ -206,7 +186,7 @@ gegl_op_class_init (GeglOpClass *klass)
   gegl_operation_class_set_keys (operation_class,
     "name",               "gegl:doubleglow",
     "title",              _("Double Glow Duel Color Effect"),
-    "categories",         "render",
+    "categories",         "Artistic",
     "position-dependent", "true",
     "reference-hash",     "f1bfgec914f0b44da36130b3abb73c9",
     "reference-hashB",    "b11bc33d1089355aad0642b4aca8791",
