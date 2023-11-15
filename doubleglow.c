@@ -184,7 +184,7 @@ gegl_op_class_init (GeglOpClass *klass)
   operation_class->attach = attach;
 
   gegl_operation_class_set_keys (operation_class,
-    "name",               "gegl:doubleglow",
+    "name",               "lb:doubleglow",
     "title",              _("Double Glow Duel Color Effect"),
     "categories",         "Artistic",
     "position-dependent", "true",
