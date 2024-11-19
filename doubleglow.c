@@ -117,7 +117,7 @@ property_double (gaussian3, _("Universal Blur"), 10.0)
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *output, *photocopy, *c2a, *color, *gaussian, *gaussian3, *glow2, *opacity;
+  GeglNode *input, *output, *photocopy, *c2a, *color, *fix, *gaussian, *gaussian3, *glow2, *opacity;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -133,6 +133,11 @@ static void attach (GeglOperation *operation)
    color = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
                                   NULL);
+
+   fix = gegl_node_new_child (gegl,
+                                  "operation", "gegl:median-blur", "radius", 0, "abyss-policy", 0,
+                                  NULL);
+
 
    gaussian = gegl_node_new_child (gegl,
                                   "operation", "gegl:gaussian-blur",
@@ -151,7 +156,7 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:dropshadow", "x", 0.0, "y", 0.0,  NULL);
                           
 
-  gegl_node_link_many (input, photocopy, c2a, color, gaussian, opacity, glow2, gaussian3, output, NULL);
+  gegl_node_link_many (input, photocopy, c2a, color, gaussian, opacity, fix, glow2, gaussian3, output, NULL);
 
 
 
